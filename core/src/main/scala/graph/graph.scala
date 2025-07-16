@@ -1,4 +1,7 @@
 package graph
+
+import scala.annotation.tailrec
+
 trait Edge[A] {
   def weight: Int
 }
@@ -20,7 +23,7 @@ trait Graph[A] {
 
   protected def displayAdjacencyMatrix(adjacenceMatrix: Map[A, Set[(A, Int)]]): Unit = {
     println("Adjacency Matrix:")
-    val header = (" " * 5)
+    val header = " " * 5
     println(header)
 
     for (from <- this.vertices) {
@@ -34,6 +37,30 @@ trait Graph[A] {
       println()
     }
   }
+  def dijkstra(start: A, destination: A, adjacenceMatrix: Map[A, Set[(A, Int)]]): (List[A], Int) = {
+    @tailrec
+    def djikstraHelper(
+                        currentNode: A,
+                        path: List[A],
+                        size: Int,
+                        otherWays: List[(List[A], Int)]
+                      ): (List[A], Int) = {
+
+      if (currentNode == destination) {
+        return (path, size)
+      }
+      val neighborhood  = adjacenceMatrix.getOrElse(currentNode, Set()).toList
+        .filterNot { case (node, _) => path.contains(node) }
+        .map { case (node, weight) => (path.appended(node), weight + size) }
+      val allWays = (neighborhood ++ otherWays)
+      val (newPath, nextSize) = allWays.minBy(_._2)
+      djikstraHelper(newPath.last, newPath, nextSize, allWays.filterNot(_._1 == newPath))
+    }
+    djikstraHelper(start, List(start), 0, List())
+  }
+
+  def DFS(): Boolean
+
 }
 
 case class GraphDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]] = Map.empty) extends Graph[A] {
@@ -70,6 +97,14 @@ case class GraphDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]] = Map.empty) 
   def displayAdjacencyMatrix(): Unit = {
     this.displayAdjacencyMatrix(this.adjacenceMatrix)
   }
+
+  def dijkstra(start: A, destination: A): (List[A], Int) = dijkstra(start, destination, this.adjacenceMatrix)
+
+
+
+  override def DFS(): Boolean = ???
+
+
 }
 
 case class GraphUnDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]]) extends Graph[A] {
@@ -108,19 +143,22 @@ case class GraphUnDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]]) extends Gr
     }
     GraphUnDirected(newMatrix2)
   }
+  def dijkstra(start: A, destination: A): (List[A], Int) = dijkstra(start, destination, this.adjacenceMatrix)
 
   def displayAdjacencyMatrix(): Unit = {
     this.displayAdjacencyMatrix(this.adjacenceMatrix)
   }
+
+  override def DFS(): Boolean = ???
 }
 
 object GraphUnDirected {
-  def symmetricMatrix[A](graph: GraphUnDirected[A], indexNode : Int = 0, indexNeighborhood : Int = 0): GraphUnDirected[A] = {
-    val node1 : A = graph.vertices.toList(indexNode)
+  @tailrec
+  def symmetricMatrix[A](graph: GraphUnDirected[A], indexNode: Int = 0, indexNeighborhood: Int = 0): GraphUnDirected[A] = {
+    val node1: A = graph.vertices.toList(indexNode)
     val neighborHood = graph.adjacenceMatrix.getOrElse(node1, Set())
     val nodes = neighborHood.map((node, weight) => node).toList
     val node2 = nodes(indexNeighborhood)
-    print(node1, node2)
     if (node1 == graph.vertices.last) {
       return graph
     }
@@ -135,11 +173,8 @@ object GraphUnDirected {
   }
 
   def main(args: Array[String]): Unit = {
-    val g = GraphUnDirected(Map("A" -> Set(("C", 2), ("D", 3)), "B" -> Set(("C", 4)), "C" -> Set(), "D" -> Set()))
-    val g2 = GraphUnDirected.symmetricMatrix(g)
-    val g3 = g2.addEdge(EdgeUndirected("B", "D", 5))
-    g3.displayAdjacencyMatrix()
-
+    val g = GraphUnDirected(Map("A" -> Set(("C", 2), ("D", 5)), "B" -> Set(("C", 1)), "C" -> Set(("D", 1)), "D" -> Set()))
+    val g2 = symmetricMatrix(g)
+    print(g2.dijkstra("A", "D"))
   }
-
 }
