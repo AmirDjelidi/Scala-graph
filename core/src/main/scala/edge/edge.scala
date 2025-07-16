@@ -1,3 +1,5 @@
+package edge
+
 trait Edge[A] {
   def weight: Int
 }
