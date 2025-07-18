@@ -1,9 +1,241 @@
 {
   "adjacenceMatrix": [
-    [ { "from": { "nom": "Accueil", "campus": "Gorki" }, "to": { "nom": "C001", "campus": "Gorki" } }, 1 ],
-    [ { "from": { "nom": "C001", "campus": "Gorki" }, "to": { "nom": "C002", "campus": "Gorki" } }, 1 ],
-    [ { "from": { "nom": "C002", "campus": "Gorki" }, "to": { "nom": "B005", "campus": "Gorki" } }, 1 ],
-    [ { "from": { "nom": "Accueil", "campus": "République" }, "to": { "nom": "R110", "campus": "République" } }, 1 ],
-    [ { "from": { "nom": "R110", "campus": "République" }, "to": { "nom": "R112", "campus": "République" } }, 1 ]
+    [
+      {"nom": "Accueil", "batiment": "A"},
+      [
+        [{"nom": "101", "batiment": "A"}, 10],
+        [{"nom": "404", "batiment": "A"}, 60]
+      ]
+    ],
+    [
+      {"nom": "101", "batiment": "A"},
+      [
+        [{"nom": "110", "batiment": "A"}, 30]
+      ]
+    ],
+    [
+      {"nom": "110", "batiment": "A"},
+      [
+        [{"nom": "Accueil", "batiment": "A"}, 25],
+        [{"nom": "303", "batiment": "A"}, 70]
+      ]
+    ],
+    [
+      {"nom": "205", "batiment": "A"},
+      [
+        [{"nom": "208", "batiment": "A"}, 10]
+      ]
+    ],
+    [
+      {"nom": "208", "batiment": "A"},
+      [
+        [{"nom": "101", "batiment": "A"}, 50]
+      ]
+    ],
+    [
+      {"nom": "303", "batiment": "A"},
+      [
+        [{"nom": "307", "batiment": "A"}, 15]
+      ]
+    ],
+    [
+      {"nom": "307", "batiment": "A"},
+      [
+        [{"nom": "Accueil", "batiment": "A"}, 100]
+      ]
+    ],
+    [
+      {"nom": "404", "batiment": "A"},
+      [
+        [{"nom": "208", "batiment": "A"}, 75],
+        [{"nom": "410", "batiment": "A"}, 20]
+      ]
+    ],
+    [
+      {"nom": "410", "batiment": "A"},
+      [
+        [{"nom": "205", "batiment": "A"}, 80]
+      ]
+    ],
+
+
+
+
+
+    [
+      {"nom": "Accueil", "batiment": "B"},
+      [
+        [{"nom": "101", "batiment": "B"}, 10]
+      ]
+    ],
+    [
+      {"nom": "101", "batiment": "B"},
+      [
+        [{"nom": "201", "batiment": "B"}, 0],
+        [{"nom": "102", "batiment": "B"}, 15]
+      ]
+    ],
+    [
+      {"nom": "102", "batiment": "B"},
+      [
+        [{"nom": "103", "batiment": "B"}, 15]
+      ]
+    ],
+    [
+      {"nom": "103", "batiment": "B"},
+      [
+        [{"nom": "202", "batiment": "B"}, 40]
+      ]
+    ],
+    [
+      {"nom": "201", "batiment": "B"},
+      [
+        [{"nom": "101", "batiment": "B"}, 0],
+        [{"nom": "301", "batiment": "B"}, 0],
+        [{"nom": "302", "batiment": "B"}, 35]
+      ]
+    ],
+    [
+      {"nom": "202", "batiment": "B"},
+      [
+        [{"nom": "203", "batiment": "B"}, 10],
+        [{"nom": "303", "batiment": "B"}, 50]
+      ]
+    ],
+    [
+      {"nom": "203", "batiment": "B"},
+      [
+        [{"nom": "Accueil", "batiment": "B"}, 80]
+      ]
+    ],
+    [
+      {"nom": "301", "batiment": "B"},
+      [
+        [{"nom": "201", "batiment": "B"}, 0],
+        [{"nom": "302", "batiment": "B"}, 20]
+      ]
+    ],
+    [
+      {"nom": "302", "batiment": "B"},
+      [
+        [{"nom": "303", "batiment": "B"}, 10]
+      ]
+    ],
+    [
+      {"nom": "303", "batiment": "B"},
+      [
+        [{"nom": "Accueil", "batiment": "B"}, 90]
+      ]
+    ],
+
+
+
+
+
+
+    [
+      {"nom": "Accueil", "batiment": "K"},
+      [
+        [{"nom": "104", "batiment": "K"}, 10]
+      ]
+    ],
+    [
+      {"nom": "101", "batiment": "K"},
+      [
+        [{"nom": "102", "batiment": "K"}, 20]
+      ]
+    ],
+    [
+      {"nom": "102", "batiment": "K"},
+      [
+        [{"nom": "103", "batiment": "K"}, 20]
+      ]
+    ],
+    [
+      {"nom": "103", "batiment": "K"},
+      [
+        [{"nom": "104", "batiment": "K"}, 20]
+      ]
+    ],
+    [
+      {"nom": "104", "batiment": "K"},
+      [
+        [{"nom": "101", "batiment": "K"}, 20],
+        [{"nom": "204", "batiment": "K"}, 40]
+      ]
+    ],
+    [
+      {"nom": "201", "batiment": "K"},
+      [
+        [{"nom": "202", "batiment": "K"}, 20]
+      ]
+    ],
+    [
+      {"nom": "202", "batiment": "K"},
+      [
+        [{"nom": "203", "batiment": "K"}, 20]
+      ]
+    ],
+    [
+      {"nom": "203", "batiment": "K"},
+      [
+        [{"nom": "204", "batiment": "K"}, 20]
+      ]
+    ],
+    [
+      {"nom": "204", "batiment": "K"},
+      [
+        [{"nom": "Accueil", "batiment": "K"}, 15],
+        [{"nom": "201", "batiment": "K"}, 20],
+        [{"nom": "104", "batiment": "K"}, 35]
+      ]
+    ],
+
+
+
+    [
+      {"nom": "Accueil", "batiment": "H"},
+      [
+        [{"nom": "101", "batiment": "H"}, 10],
+        [{"nom": "201", "batiment": "H"}, 30]
+      ]
+    ],
+    [
+      {"nom": "101", "batiment": "H"},
+      [
+        [{"nom": "102", "batiment": "H"}, 20],
+        [{"nom": "202", "batiment": "H"}, 40]
+      ]
+    ],
+    [
+      {"nom": "102", "batiment": "H"},
+      [
+        [{"nom": "Accueil", "batiment": "H"}, 15]
+      ]
+    ],
+    [
+      {"nom": "201", "batiment": "H"},
+      [
+        [{"nom": "202", "batiment": "H"}, 15]
+      ]
+    ],
+    [
+      {"nom": "202", "batiment": "H"},
+      [
+        [{"nom": "301", "batiment": "H"}, 40]
+      ]
+    ],
+    [
+      {"nom": "301", "batiment": "H"},
+      [
+        [{"nom": "302", "batiment": "H"}, 15]
+      ]
+    ],
+    [
+      {"nom": "302", "batiment": "H"},
+      [
+        [{"nom": "Accueil", "batiment": "H"}, 50]
+      ]
+    ]
   ]
 }

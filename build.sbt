@@ -41,12 +41,10 @@ lazy val app = (project in file("app"))
   .settings(
     name := "app",
     libraryDependencies ++= Seq(
-      // La librairie ZIO pour l'application
-      "dev.zio" %% "zio" % "2.0.22"
+
+      "dev.zio" %% "zio" % "2.0.22",
+
+      "dev.zio" %% "zio-json" % "0.6.2"
     )
-      // Dans app/.sbt
-
-
-
-)
+  )
 

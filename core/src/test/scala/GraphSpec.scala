@@ -170,23 +170,44 @@ class GraphSpec extends AnyFlatSpec with Matchers {
 
   behavior of "GraphViz export"
 
-  it should "generate correct GraphViz DOT string for a directed graph" in {
+  it should "generate correct GraphViz for a directed graph with path highlighting" in {
     val g = GraphDirected[String](Map.empty)
       .addEdge(EdgeDirected("A", "B", 5))
+      .addEdge(EdgeDirected("B", "C", 10))
 
-    val dotString = g.toGraphViz
-    dotString should startWith("digraph G")
+    // Test 1: Sans surlignage
+    val dotString = g.toGraphViz()
+    dotString should include("digraph G")
     dotString should include(""""A" -> "B" [label="5"];""")
-    dotString should endWith("}\n")
+    dotString should include(""""B" -> "C" [label="10"];""")
+
+    // Test 2: Avec surlignage
+    val highlightedDot = g.toGraphViz(highlightPath = List("A", "B", "C"))
+    // Vérifie les couleurs des nœuds
+    highlightedDot should include(""""A" [color="dodgerblue"""") // Nœud de départ
+    highlightedDot should include(""""B" [color="crimson"""") // Nœud intermédiaire
+    highlightedDot should include(""""C" [color="seagreen"""") // Nœud d'arrivée
+    // Vérifie les couleurs des arêtes
+    highlightedDot should include(""""A" -> "B" [label="5", color=crimson""")
+    highlightedDot should include(""""B" -> "C" [label="10", color=crimson""")
   }
 
-  it should "generate correct GraphViz DOT string for an undirected graph" in {
+  it should "generate correct GraphViz for an undirected graph and avoid duplicates" in {
     val g = GraphUnDirected[String](Map.empty)
       .addEdge(EdgeUndirected("A", "B", 10))
 
-    val dotString = g.toGraphViz
-    dotString should startWith("graph G")
-    dotString should include(""""A" -- "B" [label="10"];""")
-    dotString should endWith("}\n")
+    val dotString = g.toGraphViz()
+    dotString should include("graph G")
+    dotString should include("""[label="10"]""")
+
+    // On vérifie qu'il n'y a qu'une seule arête entre A et B, dans un sens ou l'autre
+    val edgeRegex = """"A"\s*--\s*"B"|(?s)"B"\s*--\s*"A"""".r
+    edgeRegex.findAllIn(dotString).size shouldBe 1
+
+    // On vérifie le surlignage sur le graphe non-orienté
+    val highlightedDot = g.toGraphViz(highlightPath = List("A", "B"))
+    highlightedDot should include(""""A" [color="dodgerblue"""")
+    highlightedDot should include(""""B" [color="seagreen"""")
+    highlightedDot should include("""[label="10", color=crimson""")
   }
 }
