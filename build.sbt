@@ -44,4 +44,9 @@ lazy val app = (project in file("app"))
       // La librairie ZIO pour l'application
       "dev.zio" %% "zio" % "2.0.22"
     )
-  )
+      // Dans app/.sbt
+
+
+
+)
+
