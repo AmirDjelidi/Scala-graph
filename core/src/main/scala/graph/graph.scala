@@ -61,6 +61,7 @@ trait Graph[A] {
 
   def DFS(): Boolean
   def BFS(start: A): Set[A]
+  def hasCycle(): Boolean
 }
 
 case class GraphDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]] = Map.empty) extends Graph[A] {
@@ -132,6 +133,18 @@ case class GraphDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]] = Map.empty) 
     bfsHelper(List(start), Set())
   }
 
+
+  def hasCycle(): Boolean = {
+    def dfs(node: A, visited: Set[A], recStack: Set[A]): Boolean = {
+      if (recStack.contains(node)) return true
+      if (visited.contains(node)) return false
+
+      val neighbors = adjacenceMatrix.getOrElse(node, Set()).map(_._1)
+      neighbors.exists(n => dfs(n, visited + node, recStack + node))
+    }
+
+    vertices.exists(node => dfs(node, Set(), Set()))
+  }
 
 }
 
@@ -226,6 +239,23 @@ object GraphUnDirected {
     if (node1 == graph.vertices.last) {
       return graph
     }
+    
+  def hasCycle(): Boolean = {
+    def dfs(node: A, visited: Set[A], parent: Option[A]): Boolean = {
+      val neighbors = adjacenceMatrix.getOrElse(node, Set()).map(_._1)
+      for (neighbor <- neighbors) {
+        if (!visited.contains(neighbor)) {
+          if (dfs(neighbor, visited + neighbor, Some(node))) return true
+        } else if (Some(neighbor) != parent) {
+          return true
+        }
+      }
+      false
+    }
+
+    vertices.exists(start => dfs(start, Set(start), None))
+  }
+    
     val weight = neighborHood.find((_._1 == node2)).map(_._2).fold(ifEmpty = 0)(f = value => value);
     val graph2 = graph.addEdge(EdgeUndirected(node2, node1, weight))
     if (indexNeighborhood < nodes.length - 1) {
