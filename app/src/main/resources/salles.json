@@ -1,0 +1,9 @@
+{
+  "adjacenceMatrix": [
+    [ { "from": { "nom": "Accueil", "campus": "Gorki" }, "to": { "nom": "C001", "campus": "Gorki" } }, 1 ],
+    [ { "from": { "nom": "C001", "campus": "Gorki" }, "to": { "nom": "C002", "campus": "Gorki" } }, 1 ],
+    [ { "from": { "nom": "C002", "campus": "Gorki" }, "to": { "nom": "B005", "campus": "Gorki" } }, 1 ],
+    [ { "from": { "nom": "Accueil", "campus": "République" }, "to": { "nom": "R110", "campus": "République" } }, 1 ],
+    [ { "from": { "nom": "R110", "campus": "République" }, "to": { "nom": "R112", "campus": "République" } }, 1 ]
+  ]
+}
