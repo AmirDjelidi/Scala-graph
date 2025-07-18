@@ -1,7 +1,0 @@
-{
-  "adjacenceMatrix": [
-    [ { "node1": "Gorki", "node2": "République" }, 15 ],
-    [ { "node1": "Gorki", "node2": "Home" }, 5 ],
-    [ { "node1": "République", "node2": "Home" }, 10 ]
-  ]
-}

@@ -1,0 +1,8 @@
+{
+  "adjacenceMatrix": [
+    { "from": "A", "to": "B", "distance": 10 },
+    { "from": "A", "to": "C", "distance": 15 },
+    { "from": "B", "to": "G", "distance": 20 },
+    { "from": "H", "to": "K", "distance": 25 }
+  ]
+}
