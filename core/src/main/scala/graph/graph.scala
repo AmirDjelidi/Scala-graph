@@ -274,10 +274,4 @@ object GraphUnDirected {
       symmetricMatrix(graph2, indexNode + 1, 0)
     }
   }
-
-  def main(args: Array[String]): Unit = {
-    val g = GraphUnDirected(Map("A" -> Set(("C", 2), ("D", 5)), "B" -> Set(("C", 1)), "C" -> Set(("D", 1)), "D" -> Set()))
-    val g2 = symmetricMatrix(g)
-    print(g2.hasCycle())
-  }
 }
