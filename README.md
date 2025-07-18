@@ -108,6 +108,9 @@ To make your experience easier, **[here](https://docs.google.com/spreadsheets/d/
     -   The **intermediate** nodes and edges of the path are highlighted in **red**.
         
 -   **Weight of 0: The Elevator**: An edge with a weight of `0` between two rooms signifies an **elevator**, allowing for instant travel.
+-   **One Accueil Only ?**:
+    - Building C, there is only one reception area because it only has one room.
+    - Building G represents the Louis Aragon station (imagined departure point).
     
 
 ----------
