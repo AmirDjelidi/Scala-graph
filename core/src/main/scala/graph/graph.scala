@@ -60,7 +60,7 @@ trait Graph[A] {
   }
 
   def DFS(): Boolean
-
+  def BFS(start: A): Set[A]
 }
 
 case class GraphDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]] = Map.empty) extends Graph[A] {
@@ -97,11 +97,7 @@ case class GraphDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]] = Map.empty) 
   def displayAdjacencyMatrix(): Unit = {
     this.displayAdjacencyMatrix(this.adjacenceMatrix)
   }
-
   def dijkstra(start: A, destination: A): (List[A], Int) = dijkstra(start, destination, this.adjacenceMatrix)
-
-
-
   override def DFS(): Boolean = {
     def dfsHelper(start: A): Set[A] = {
       @tailrec
@@ -119,7 +115,22 @@ case class GraphDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]] = Map.empty) 
     }
     vertices.forall(start => dfsHelper(start).size == vertices.size)
   }
+  def BFS(start: A): Set[A] = {
+    @tailrec
+    def bfsHelper(queue: List[A], visited: Set[A]): Set[A] = {
+      queue match {
+        case Nil => visited
+        case node :: rest if visited.contains(node) =>
+          bfsHelper(rest, visited)
+        case node :: rest =>
+          val neighbors = adjacenceMatrix.getOrElse(node, Set()).map(_._1)
+          val unvisited = neighbors.diff(visited)
+          bfsHelper(rest ++ unvisited.toList, visited + node)
+      }
+    }
 
+    bfsHelper(List(start), Set())
+  }
 
 
 }
@@ -162,6 +173,7 @@ case class GraphUnDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]]) extends Gr
   }
   def dijkstra(start: A, destination: A): (List[A], Int) = dijkstra(start, destination, this.adjacenceMatrix)
 
+
   def displayAdjacencyMatrix(): Unit = {
     this.displayAdjacencyMatrix(this.adjacenceMatrix)
   }
@@ -184,6 +196,23 @@ case class GraphUnDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]]) extends Gr
     val visited = dfsHelper(List(start), Set())
     visited.size == vertices.size
   }
+
+  def BFS(start: A): Set[A] = {
+    @tailrec
+    def bfsHelper(queue: List[A], visited: Set[A]): Set[A] = {
+      queue match {
+        case Nil => visited
+        case node :: rest if visited.contains(node) =>
+          bfsHelper(rest, visited)
+        case node :: rest =>
+          val neighbors = adjacenceMatrix.getOrElse(node, Set()).map(_._1)
+          val unvisited = neighbors.diff(visited)
+          bfsHelper(rest ++ unvisited.toList, visited + node)
+      }
+    }
+    bfsHelper(List(start), Set())
+  }
+
 
 }
 
@@ -210,6 +239,6 @@ object GraphUnDirected {
   def main(args: Array[String]): Unit = {
     val g = GraphUnDirected(Map("A" -> Set(("C", 2), ("D", 5)), "B" -> Set(("C", 1)), "C" -> Set(("D", 1)), "D" -> Set()))
     val g2 = symmetricMatrix(g)
-    print(g2.DFS())
+    print(g2.BFS("A"))
   }
 }
