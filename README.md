@@ -1,6 +1,7 @@
 # Functional Graphs in Scala 3 & ZIO
 
 _Final project for the functional programming course produced by Tom Klajn, Clément Tauziède and Amir Djelidi_
+Target Skills: [C201], [C202]
 
 ## Project Overview
 
