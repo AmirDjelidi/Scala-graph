@@ -225,7 +225,19 @@ case class GraphUnDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]]) extends Gr
     }
     bfsHelper(List(start), Set())
   }
-
+  
+  def hasCycle(): Boolean = {
+    def dfs(node: A, visited: Set[A], parent: Option[A]): Boolean = {
+      val neighbors = adjacenceMatrix.getOrElse(node, Set()).map(_._1)
+      for (neighbor <- neighbors) {
+        if (!visited.contains(neighbor)) {
+          if (dfs(neighbor, visited + neighbor, Some(node))) return true
+        } else if (Some(neighbor) != parent) {
+          return true
+        }
+      }
+      false
+    }
 
 }
 
@@ -240,18 +252,6 @@ object GraphUnDirected {
       return graph
     }
     
-  def hasCycle(): Boolean = {
-    def dfs(node: A, visited: Set[A], parent: Option[A]): Boolean = {
-      val neighbors = adjacenceMatrix.getOrElse(node, Set()).map(_._1)
-      for (neighbor <- neighbors) {
-        if (!visited.contains(neighbor)) {
-          if (dfs(neighbor, visited + neighbor, Some(node))) return true
-        } else if (Some(neighbor) != parent) {
-          return true
-        }
-      }
-      false
-    }
 
     vertices.exists(start => dfs(start, Set(start), None))
   }
