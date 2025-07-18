@@ -3,6 +3,11 @@ package graph
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
+// Imports ajoutés pour les tests de l'étape 2
+import zio.json.*
+import graph.JsonCodecs.given
+import graph.GraphVizExport.*
+
 class GraphSpec extends AnyFlatSpec with Matchers {
 
   behavior of "GraphDirected"
@@ -72,6 +77,7 @@ class GraphSpec extends AnyFlatSpec with Matchers {
       .addEdge(EdgeUndirected("A", "B", 2))
       .addEdge(EdgeUndirected("B", "C", 3))
 
+    // Note: l'ordre n'est pas garanti, on vérifie juste la présence
     g.edges should contain allOf (
       EdgeUndirected("A", "B", 2),
       EdgeUndirected("B", "A", 2),
@@ -125,6 +131,7 @@ class GraphSpec extends AnyFlatSpec with Matchers {
     cost shouldBe 3
   }
 
+  // Comportement hérité de l'ancien code, laissé pour la complétude
   behavior of "GraphUnDirected.symmetricMatrix"
 
   it should "symmetrize adjacency matrix correctly" in {
@@ -135,5 +142,51 @@ class GraphSpec extends AnyFlatSpec with Matchers {
 
     val g2 = GraphUnDirected.symmetricMatrix(g)
     g2.adjacenceMatrix("B") should contain(("A", 1))
+  }
+
+  // --- NOUVEAUX TESTS POUR L'ÉTAPE 2 ---
+
+  behavior of "Graph JSON serialization"
+
+  it should "serialize and deserialize a directed graph correctly" in {
+    val g = GraphDirected[String](Map.empty)
+      .addEdge(EdgeDirected("Paris", "Lyon", 465))
+
+    val jsonString = g.toJson
+    val decodedGraph = jsonString.fromJson[GraphDirected[String]]
+
+    decodedGraph shouldBe Right(g)
+  }
+
+  it should "serialize and deserialize an undirected graph correctly" in {
+    val g = GraphUnDirected[String](Map.empty)
+      .addEdge(EdgeUndirected("Gorki", "République", 15))
+
+    val jsonString = g.toJson
+    val decodedGraph = jsonString.fromJson[GraphUnDirected[String]]
+
+    decodedGraph shouldBe Right(g)
+  }
+
+  behavior of "GraphViz export"
+
+  it should "generate correct GraphViz DOT string for a directed graph" in {
+    val g = GraphDirected[String](Map.empty)
+      .addEdge(EdgeDirected("A", "B", 5))
+
+    val dotString = g.toGraphViz
+    dotString should startWith("digraph G")
+    dotString should include(""""A" -> "B" [label="5"];""")
+    dotString should endWith("}\n")
+  }
+
+  it should "generate correct GraphViz DOT string for an undirected graph" in {
+    val g = GraphUnDirected[String](Map.empty)
+      .addEdge(EdgeUndirected("A", "B", 10))
+
+    val dotString = g.toGraphViz
+    dotString should startWith("graph G")
+    dotString should include(""""A" -- "B" [label="10"];""")
+    dotString should endWith("}\n")
   }
 }
