@@ -37,6 +37,7 @@ trait Graph[A] {
       println()
     }
   }
+
   def dijkstra(start: A, destination: A, adjacenceMatrix: Map[A, Set[(A, Int)]]): (List[A], Int) = {
     @tailrec
     def djikstraHelper(
@@ -49,18 +50,21 @@ trait Graph[A] {
       if (currentNode == destination) {
         return (path, size)
       }
-      val neighborhood  = adjacenceMatrix.getOrElse(currentNode, Set()).toList
+      val neighborhood = adjacenceMatrix.getOrElse(currentNode, Set()).toList
         .filterNot { case (node, _) => path.contains(node) }
         .map { case (node, weight) => (path.appended(node), weight + size) }
       val allWays = (neighborhood ++ otherWays)
       val (newPath, nextSize) = allWays.minBy(_._2)
       djikstraHelper(newPath.last, newPath, nextSize, allWays.filterNot(_._1 == newPath))
     }
+
     djikstraHelper(start, List(start), 0, List())
   }
 
   def DFS(): Boolean
+
   def BFS(start: A): Set[A]
+
   def hasCycle(): Boolean
 }
 
@@ -98,7 +102,9 @@ case class GraphDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]] = Map.empty) 
   def displayAdjacencyMatrix(): Unit = {
     this.displayAdjacencyMatrix(this.adjacenceMatrix)
   }
+
   def dijkstra(start: A, destination: A): (List[A], Int) = dijkstra(start, destination, this.adjacenceMatrix)
+
   override def DFS(): Boolean = {
     def dfsHelper(start: A): Set[A] = {
       @tailrec
@@ -112,10 +118,13 @@ case class GraphDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]] = Map.empty) 
             loop(newNodes.toList ++ rest, visited + node)
         }
       }
+
       loop(List(start), Set())
     }
+
     vertices.forall(start => dfsHelper(start).size == vertices.size)
   }
+
   def BFS(start: A): Set[A] = {
     @tailrec
     def bfsHelper(queue: List[A], visited: Set[A]): Set[A] = {
@@ -184,6 +193,7 @@ case class GraphUnDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]]) extends Gr
     }
     GraphUnDirected(newMatrix2)
   }
+
   def dijkstra(start: A, destination: A): (List[A], Int) = dijkstra(start, destination, this.adjacenceMatrix)
 
 
@@ -204,6 +214,7 @@ case class GraphUnDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]]) extends Gr
           dfsHelper(newNodes.toList ++ rest, visited + node)
       }
     }
+
     if (vertices.isEmpty) return true
     val start = vertices.head
     val visited = dfsHelper(List(start), Set())
@@ -223,9 +234,10 @@ case class GraphUnDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]]) extends Gr
           bfsHelper(rest ++ unvisited.toList, visited + node)
       }
     }
+
     bfsHelper(List(start), Set())
   }
-  
+
   def hasCycle(): Boolean = {
     def dfs(node: A, visited: Set[A], parent: Option[A]): Boolean = {
       val neighbors = adjacenceMatrix.getOrElse(node, Set()).map(_._1)
@@ -238,6 +250,8 @@ case class GraphUnDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]]) extends Gr
       }
       false
     }
+    vertices.exists(start => dfs(start, Set(start), None))
+  }
 
 }
 
@@ -251,11 +265,6 @@ object GraphUnDirected {
     if (node1 == graph.vertices.last) {
       return graph
     }
-    
-
-    vertices.exists(start => dfs(start, Set(start), None))
-  }
-    
     val weight = neighborHood.find((_._1 == node2)).map(_._2).fold(ifEmpty = 0)(f = value => value);
     val graph2 = graph.addEdge(EdgeUndirected(node2, node1, weight))
     if (indexNeighborhood < nodes.length - 1) {
@@ -269,6 +278,6 @@ object GraphUnDirected {
   def main(args: Array[String]): Unit = {
     val g = GraphUnDirected(Map("A" -> Set(("C", 2), ("D", 5)), "B" -> Set(("C", 1)), "C" -> Set(("D", 1)), "D" -> Set()))
     val g2 = symmetricMatrix(g)
-    print(g2.BFS("A"))
+    print(g2.hasCycle())
   }
 }
