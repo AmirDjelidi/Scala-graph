@@ -102,7 +102,24 @@ case class GraphDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]] = Map.empty) 
 
 
 
-  override def DFS(): Boolean = ???
+  override def DFS(): Boolean = {
+    def dfsHelper(start: A): Set[A] = {
+      @tailrec
+      def loop(stack: List[A], visited: Set[A]): Set[A] = {
+        stack match {
+          case Nil => visited
+          case node :: rest if visited.contains(node) => loop(rest, visited)
+          case node :: rest =>
+            val neighbors = adjacenceMatrix.getOrElse(node, Set()).map(_._1)
+            val newNodes = neighbors.diff(visited)
+            loop(newNodes.toList ++ rest, visited + node)
+        }
+      }
+      loop(List(start), Set())
+    }
+    vertices.forall(start => dfsHelper(start).size == vertices.size)
+  }
+
 
 
 }
@@ -149,7 +166,25 @@ case class GraphUnDirected[A](adjacenceMatrix: Map[A, Set[(A, Int)]]) extends Gr
     this.displayAdjacencyMatrix(this.adjacenceMatrix)
   }
 
-  override def DFS(): Boolean = ???
+  override def DFS(): Boolean = {
+    @tailrec
+    def dfsHelper(stack: List[A], visited: Set[A]): Set[A] = {
+      stack match {
+        case Nil => visited
+        case node :: rest if visited.contains(node) =>
+          dfsHelper(rest, visited)
+        case node :: rest =>
+          val neighbors = adjacenceMatrix.getOrElse(node, Set()).map(_._1)
+          val newNodes = neighbors.diff(visited)
+          dfsHelper(newNodes.toList ++ rest, visited + node)
+      }
+    }
+    if (vertices.isEmpty) return true
+    val start = vertices.head
+    val visited = dfsHelper(List(start), Set())
+    visited.size == vertices.size
+  }
+
 }
 
 object GraphUnDirected {
@@ -175,6 +210,6 @@ object GraphUnDirected {
   def main(args: Array[String]): Unit = {
     val g = GraphUnDirected(Map("A" -> Set(("C", 2), ("D", 5)), "B" -> Set(("C", 1)), "C" -> Set(("D", 1)), "D" -> Set()))
     val g2 = symmetricMatrix(g)
-    print(g2.dijkstra("A", "D"))
+    print(g2.DFS())
   }
 }
